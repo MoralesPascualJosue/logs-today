@@ -4,17 +4,15 @@ import {useHistory, useLocation} from "react-router-dom";
 
 import InputTextAnimate from "../../Components/InputTextAnimate";
 import {  useLoginMutation } from "../../Features/Api/ApiSlice";
-// import useAuth from "../../Features/Auth/Hooks/useAuth";
 import { emailErrorValidation } from "../../Utils/FormErrorValidation";
-import { useAppDispatch, useAppSelector } from "../../Store/Hooks";
-import {selectCurrentUser, isLoggedUser, setCredentials} from "../../Features/Auth/Store/AuthSlice"
+
+import { useAppSelector } from "../../Store/Hooks";
+import { isLoggedUser} from "../../Features/Auth/Store/AuthSlice"
 
 const FormLogin = () => {
   const location = useLocation();
   const history = useHistory();
-  const dispatch = useAppDispatch();
-  // const toast = useToast();
-  // const {isLogginLoading, hasLoginError, errorMessage} = useAuth();
+
   let { from } = location.state || { from: { pathname: "/home" } };
 
   const [email, setEmail] = useState("");
@@ -26,42 +24,19 @@ const FormLogin = () => {
   const isErrorPassword = password === "";
   const valide = isErrorEmail || isErrorPassword;
 
-  const user = useAppSelector(selectCurrentUser);
   const isLogged = useAppSelector(isLoggedUser);
 
   const [
     login,
-    {
-      isLoading,
-    isSuccess,
-    isError,
-    error}
+    {isLoading,isError,error}
   ] = useLoginMutation();
 
   useEffect(() => {
     if (isLogged) history.replace(from);    
   }, [isLogged, history]);
 
-const submitLogin = async () => {
-  // login({ email, password });
-  
-    try {
-      const credentials = await login({ email, password }).unwrap();
-      // Being that the result is handled in extraReducers in authSlice,
-      // we know that we're authenticated after this, so the user
-      // and token will be present in the store
-      console.log("you are logged");
-      dispatch(setCredentials(credentials));
-      
-    } catch (err) {
-      // toast({
-      //   status: "error",
-      //   title: "Error",
-      //   description: "Oh no, there was an error!",
-      //   isClosable: true,
-      // });
-    }
-    // login({email, password});
+  const submitLogin = async () => {
+    await login({ email, password });
   };
 
   return (

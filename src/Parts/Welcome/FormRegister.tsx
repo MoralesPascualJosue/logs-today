@@ -2,16 +2,19 @@ import {Container, Button, Text} from "@chakra-ui/react";
 import React, {useState} from "react";
 
 import InputTextAnimate from "../../Components/InputTextAnimate";
-import AuthService from "../../Features/Auth/Services/AuthService";
+// import AuthService from "../../Features/Auth/Services/AuthService";
+import {useRegisterMutation} from "../../Features/Api/ApiSlice";
 import {emailErrorValidation, minChartErrorValidation} from "../../Utils/FormErrorValidation";
 
 const FormRegister = () => {
-  const [state, setState] = useState({
-    isLoading: false,
-    hasError: false,
-    errorMessage: "",
-    success: false,
-  });
+  // const [state, setState] = useState({
+  //   isLoading: false,
+  //   hasError: false,
+  //   errorMessage: "",
+  //   success: false,
+  // });
+  const [register, {isLoading, isSuccess, isError, error}] = useRegisterMutation();
+
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [inputName, setInputName] = useState("");
@@ -26,28 +29,30 @@ const FormRegister = () => {
   const valide = isErrorEmail || isErrorPassword || isErrorName;
 
   const submitLogin = () => {
-    setState({
-      isLoading: true,
-      hasError: false,
-      errorMessage: "",
-      success: false,
-    });
+    // setState({
+    //   isLoading: true,
+    //   hasError: false,
+    //   errorMessage: "",
+    //   success: false,
+    // });
 
-    AuthService.register({email: inputEmail, name: inputName, password: inputPassword})
-      .then((response) => {
-        setState({isLoading: false, hasError: false, errorMessage: "", success: true});
-      })
-      .catch((error) => {
-        setState({
-          isLoading: false,
-          hasError: true,
-          errorMessage: error.message,
-          success: false,
-        });
-      });
+    register({email: inputEmail, name: inputName, password: inputPassword});
+
+    // AuthService.register({email: inputEmail, name: inputName, password: inputPassword})
+    //   .then((response) => {
+    //     setState({isLoading: false, hasError: false, errorMessage: "", success: true});
+    //   })
+    //   .catch((error) => {
+    //     setState({
+    //       isLoading: false,
+    //       hasError: true,
+    //       errorMessage: error.message,
+    //       success: false,
+    //     });
+    //   });
   };
 
-  if (state.success) {
+  if (isSuccess) {
     return <h3>Congratulations! You´ve been successfully registered.</h3>;
   }
 
@@ -90,14 +95,14 @@ const FormRegister = () => {
         alignSelf="center"
         backgroundColor="blue.500"
         isDisabled={valide}
-        isLoading={state.isLoading}
+        isLoading={isLoading}
         onClick={submitLogin}
       >
         Register
       </Button>
-      {state.hasError && (
+      {isError && (
         <Text color="red.500" p={5}>
-          {state.errorMessage}
+          {error.error ? error.error : error.data.message}
         </Text>
       )}
     </Container>

@@ -3,6 +3,7 @@ import {createSlice, PayloadAction, nanoid, createAsyncThunk} from "@reduxjs/too
 import Log from "../Interfaces/Log";
 import type {RootState} from "../../../Store/Store";
 import LogService from "../Services/LogService";
+import {logApi} from "../Api/ApiSlice";
 
 // Define a type for the slice state
 interface LogsStateInterface {
@@ -14,53 +15,7 @@ interface LogsStateInterface {
 
 // Define the initial state using that type
 const initialState: LogsStateInterface = {
-  logs: [
-    {
-      id: 0,
-      idLog: "1657498884211",
-      body: [
-        {
-          language: "text",
-          childrens: [
-            {
-              type: "paragraph",
-              language: "text",
-              children: [{text: "uuuuuiiiooo u0980990i09i09i", bold: true}],
-            },
-            {type: "paragraph", language: "text", children: [{bold: true, text: ""}]},
-            {
-              type: "paragraph",
-              language: "text",
-              children: [
-                {bold: true, text: "Conteindio 12346i{ñ8lp asdz k,kkiko99999999999999999n88889999"},
-              ],
-            },
-            {
-              type: "paragraph",
-              language: "text",
-              children: [{bold: true, text: "zavcx kk mmkkkkk kkkkkkkkkkkkkkkkkkkkjjjo"}],
-            },
-            {type: "paragraph", language: "text", children: [{text: ""}]},
-            {type: "paragraph", language: "text", children: [{text: ""}]},
-            {
-              type: "paragraph",
-              language: "text",
-              children: [{text: "asd sadasdla kmdlkasmdklamskdc"}],
-            },
-            {type: "paragraph", language: "text", children: [{text: "dasda askdmlaks akdmlaksmd"}]},
-            {type: "paragraph", language: "text", children: [{text: "sadlkasdlaslkd "}]},
-          ],
-          type: "paragraph",
-        },
-      ],
-      date: "Sun Jul 10 2022",
-      reactions: {
-        reviewed: 0,
-        works: 0,
-        seen: 2,
-      },
-    },
-  ],
+  logs: [],
   status: "idle",
   error: null,
 };
@@ -150,6 +105,17 @@ export const logsSlice = createSlice({
       })
       .addCase(addNewLog.fulfilled, (state, action) => {
         // We can directly add the new post object to our posts array
+        state.logs.unshift(action.payload);
+      })
+      .addMatcher(
+        logApi.endpoints.getLogs.matchFulfilled,
+        (state, action: PayloadAction<Log[]>) => {
+          state.status = "succeeded";
+          state.logs = state.logs.concat(action.payload);
+        },
+      )
+      .addMatcher(logApi.endpoints.putLog.matchFulfilled, (state, action: PayloadAction<Log>) => {
+        state.status = "succeeded";
         state.logs.unshift(action.payload);
       });
   },

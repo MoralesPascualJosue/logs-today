@@ -2,16 +2,16 @@ import React from "react";
 import {Stack, StackDivider, Container, useColorModeValue, Button, Text} from "@chakra-ui/react";
 import {useLocation, useHistory} from "react-router-dom";
 
-import useAuth from "../Features/Auth/Hooks/useAuth";
+import {useLogoutMutation} from "../Features/Api/ApiSlice";
 
 const Settings = () => {
-  const {logout} = useAuth();
   const location = useLocation();
   const history = useHistory();
   let {background} = location.state || {from: {background: "/home"}};
+  const [logout] = useLogoutMutation();
 
   const handleLogOut = () => {
-    logout();
+    logout("");
     history.replace(background);
   };
 

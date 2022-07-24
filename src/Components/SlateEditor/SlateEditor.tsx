@@ -219,6 +219,7 @@ interface SlateEditorProps {
   onSave(log: Object): void;
   body?: Array<any>;
   name?: String;
+  isLoading?: boolean
 }
 
 const SlateEditor = (Props: SlateEditorProps) => {
@@ -457,6 +458,7 @@ const SlateEditor = (Props: SlateEditorProps) => {
             </Stack>
             <Button
               colorScheme="primary"
+              isLoading={Props.isLoading}
               onClick={() => {
                 var html = CustomEditor.save(editor);
 

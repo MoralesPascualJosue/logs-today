@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #242c3b">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" sizes="114x114" type="image/svg+xml" href="/src/Resources/shortIcon.svg"/>
+    <style media="screen">
+    .content {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      height: 90%;
+      width: 90%;
+      position: absolute;
+      padding: 1rem;
+    }
+    .content img{
+      border: 5px solid #22c35e;
+      border-radius: 20px;
+      height: 60%;
+      width: 50%;
+      background-color: #fff;
+    }
+    /* ======================== */
+
+    .loader {
+      width: 8rem;
+      height: 20%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+    .loader span{
+      font-size: 22px;
+      font-weight: bold;
+      color: #22c35e;
+      text-transform: uppercase;
+      margin: auto;
+    }
+    .ball {
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50%;
+      background-color: #fff;
+      animation: bounce .5s alternate
+      infinite;
+    }
+    .ball:nth-child(2) {
+      animation-delay: .16s;
+    }
+    .ball:nth-child(3) {
+      animation-delay: .32s;
+    }
+    @keyframes bounce {
+      from {
+          transform: scaleX(1.25);
+      }
+      to{
+          transform:
+          translateY(-50px) scaleX(1);
+      }
+    }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finger Log</title>
+  </head>
+  <body>
+    <div id="root">
+      <div class="content">
+        <img src="src/Resources/complete.svg" alt="Finger Log" />
+        <div class="loader">
+          <div class="ball"></div>
+          <div class="ball"></div>
+          <div class="ball"></div>
+          <span class="loaderText">Loading...</span>
+        </div>
+      </div>
+
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
